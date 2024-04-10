@@ -1,0 +1,20 @@
+{% extends "layout/index.html" %}
+
+{% block content %}
+
+<h2>Supprimer l'usager #{{ data.id }}: {{ data.full_name}}?</h2>
+
+<p>
+  Êtes-vous sûr de vouloir supprimer l'usager? Cette action est irréversible.
+</p>
+
+<form action="/users/{{ data.id }}/delete" method="POST">
+  <div class="d-flex flex-row gap-2">
+    <a href="/users" class="btn btn-secondary">
+      Usagers
+    </a>
+    <button type="submit" class="btn btn-danger">Supprimer</button>
+  </div>
+</form>
+
+{% endblock %}

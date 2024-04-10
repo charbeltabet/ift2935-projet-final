@@ -1,0 +1,50 @@
+{% extends "layout/index.html" %}
+
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center">
+  <h2>Usagers</h2>
+  <a href="/users/new">
+    <button class="btn btn-primary">Nouvel Usager</button>
+  </a>
+</div>
+{% if data|length > 0 %}
+<table class="table">
+  <thead class="thead-dark">
+    <tr>
+      {% for key in data[0] %}
+      <th scope="col">{{ key|humanize }}</th>
+      {% endfor %}
+      <th scope="col">Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for item in data %}
+    <tr>
+      {% for td_key, td_value in item.items() %}
+      <td>
+        {% if td_key == 'id' %}
+        <a href="{{ url_for('users.show', id=td_value) }}">{{ td_value }}</a>
+        {% else %}
+        {{ td_value }}
+        {% endif %}
+      </td>
+      {% endfor %}
+      <td>
+        <div class="d-flex flex-row gap-2">
+          <a href="{{ url_for('users.show', id=item.id) }}">
+            Modifier
+          </a>
+          <a class="link-danger" href="{{ url_for('users.delete_confirmation', id=item.id) }}">
+            Supprimer
+          </a>
+        </div>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<p>No data available.</p>
+{% endif %}
+{% endblock %}

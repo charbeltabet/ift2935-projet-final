@@ -1,0 +1,37 @@
+{% extends "layout/index.html" %}
+
+{% block content %}
+<h1>Entités Mobiles</h1>
+<p>
+  On souhaite pouvoir faire adopter une entité mobile par un particulier, une école, un laboratoire, un organisme. Par
+  exemple on souhaite faire adopter un requin par une école.
+</p>
+
+<div class="py-3">
+  <img height="400" src="https://plus.unsplash.com/premium_photo-1661914453591-f8bde82a87db" />
+</div>
+
+Le requin en question a été muni de capteurs GPS qui font que l'on peut suivre sa migration partout dans le monde.
+
+<b>Le cahier des charges est le suivant:</b>
+
+<p>
+  Les entités mobiles peuvent être des requins, des ours, un iceberg, une baleine, un oiseau, un bateau, etc.
+  L'intérêt peut être scientifique ou ludique.
+  Dans tous les cas on dispose d'une BD de positions GPS et on doit pouvoir établir le parcours de l'entité. On veut
+  aussi
+  adjoindre à la BD des informations sur le climat (température, vent, houle, courant-jet, etc.).
+  L'accès au parcours de chacune des entités mobiles ne sera possible que si le client (particulier, organisme, etc.) a
+  déjà adopté cette entité (droits d'accès).
+</p>
+
+
+<p>
+  <b>Note</b> : Vous pouvez inclure dans chaque entité tous les éléments réalistes possibles à condition de les
+  justifier.
+</p>
+<p>
+  <b>Note II</b> : Identifiez les différentes entités à l'aide d'un ID.
+</p>
+
+{% endblock %}

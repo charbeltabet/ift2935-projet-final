@@ -1,0 +1,96 @@
+{% extends "layout/index.html" %}
+
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center">
+  <h2>Usager #{{ data.id }}: {{ data.full_name}}</h2>
+  <a class="btn btn-danger" href="/users/{{ data.id }}/delete">
+    Supprimer
+  </a>
+</div>
+
+<form action="/users/{{ data.id }}" method="POST">
+  <div class="d-flex flex-column gap-2 w-50">
+    <div class="form-group">
+      <label for="name">Full Name</label>
+      <input type="text" class="form-control" id="full_name" name="full_name" value="{{ data.full_name }}" required>
+    </div>
+    <div class="d-flex flex-row gap-2">
+      <a href="/users" class="btn btn-secondary">
+        Usagers
+      </a>
+      <button type="submit" class="btn btn-success">Mettre à jour</button>
+    </div>
+  </div>
+</form>
+
+<div class="d-flex justify-content-between align-items-center mt-4">
+  <h4>Entités mobiles de l'usager</h4>
+  <a href="/entities">
+    <button class="btn btn-primary">Entités mobiles</button>
+  </a>
+</div>
+
+{% if user_entities|length > 0 %}
+<table class="table">
+  <thead class="thead-dark">
+    <tr>
+      {% for key in user_entities[0] %}
+      <th scope="col">{{ key|humanize }}</th>
+      {% endfor %}
+      <th scope="col">Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for item in user_entities %}
+    <tr>
+      {% for td_key, td_value in item.items() %}
+      <td>
+        {% if td_key == 'id' %}
+        <a href="{{ url_for('entities.show', id=td_value) }}">{{ td_value }}</a>
+        {% else %}
+        {{ td_value }}
+        {% endif %}
+      </td>
+      {% endfor %}
+      <td>
+        <div class="d-flex flex-row gap-2">
+          <a href="{{ url_for('entities.show', id=item.id) }}">
+            Modifier
+          </a>
+          <a class="link-danger" href="{{ url_for('adoptions.delete_confirmation', id=item.adoption_id) }}">
+            Désassocier
+          </a>
+        </div>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<p>No data available.</p>
+{% endif %}
+
+<h4>Adoption d'une nouvelle entité mobile</h4>
+<form action="/adoptions" method="POST">
+  <input type="hidden" name="user_id" value="{{ data.id }}">
+  <input type="hidden" name="redirect_url" value="{{ url_for('users.show', id=data.id) }}">
+  <div class="d-flex flex-column gap-2 w-50">
+    <div class="form-group">
+      <label for="mobile_entity_id">Entité mobile</label>
+      <select class="form-control" id="mobile_entity_id" name="mobile_entity_id" required>
+        {% for entity in all_entities %}
+        <option value="{{ entity.id }}">
+          {% if entity.type %}
+          {{ entity.type|humanize }}: {{ entity.label }}
+          {% endif %}
+        </option>
+        {% endfor %}
+      </select>
+    </div>
+    <div>
+      <button type="submit" class="btn btn-success">Ajouter</button>
+    </div>
+  </div>
+</form>
+{% endblock %}

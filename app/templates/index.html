@@ -1,0 +1,42 @@
+{% extends "layout/index.html" %}
+
+{% block content %}
+{% from "macros.html" import render_table %}
+
+<div class="container">
+  <div class="row">
+    <div class="col-sm">
+      {{ render_table(entities_by_users, "Entités les plus adoptés") }}
+    </div>
+    <div class="col-sm">
+      {{ render_table(users_by_adoptions, "Usagers par adoption") }}
+    </div>
+    <div class="col-sm">
+      {{ render_table(unadopted_entities, "Entités non adoptées") }}
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm">
+      {{ render_table(last_logs_per_entity, "Derniers logs par entité") }}
+    </div>"
+    <div class="col-sm">
+      {{ render_table(users_with_multiple_adoptions, "Usagers avec plusieurs adoptions") }}
+    </div>
+    <div class="col-sm">
+      {{ render_table(adoptions_by_type, "Adoptions par type") }}
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm">
+      {{ render_table(avg_temperature_by_type, "Température moyenne par type") }}
+    </div>
+    <div class="col-sm">
+      {{ render_table(entities_with_most_logs, "Entités avec le plus de logs") }}
+    </div>
+    <div class="col-sm">
+      {{ render_table(avg_conditions_by_type, "Conditions moyennes par type") }}
+    </div>
+  </div>
+</div>
+
+{% endblock %}

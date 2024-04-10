@@ -1,0 +1,170 @@
+{% extends "layout/index.html" %}
+
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center">
+  <h2>Entité Mobile #{{ data.id }}: {{ data.name}}</h2>
+  <a class="btn btn-danger" href="/entities/{{ data.id }}/delete">
+    Supprimer
+  </a>
+</div>
+
+<form action="/entities/{{ data.id }}" method="POST">
+  <div class="d-flex flex-column gap-2 w-50">
+    <div class="form-group">
+      <label for="type">Type</label>
+      <select class="form-control" id="type" name="entity_type" required>
+        {% for type in entity_types %}
+        <option value="{{ type }}">{{ type.title() }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="name">Name</label>
+      <input type="text" class="form-control" id="name" name="name" value="{{ data.name }}" required>
+    </div>
+    <div class="form-group">
+      <label for="label">Label</label>
+      <input type="text" class="form-control" id="label" name="label" value="{{ data.label }}" required>
+    </div>
+    <div class="d-flex flex-row gap-2">
+      <a href="/entities" class="btn btn-secondary">
+        Entités
+      </a>
+      <button type="submit" class="btn btn-success">Mettre à jour</button>
+    </div>
+  </div>
+</form>
+
+<hr />
+
+<div class="d-flex justify-content-between align-items-center mt-4">
+  <h4>Usagers associés</h4>
+  <a href="/entities">
+    <button class="btn btn-primary">Entités mobiles</button>
+  </a>
+</div>
+
+{% if entity_users|length > 0 %}
+<table class="table">
+  <thead class="thead-dark">
+    <tr>
+      {% for key in entity_users[0] %}
+      <th scope="col">{{ key|humanize }}</th>
+      {% endfor %}
+      <th scope="col">Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for item in entity_users %}
+    <tr>
+      {% for td_key, td_value in item.items() %}
+      <td>
+        {% if td_key == 'id' %}
+        <a href="{{ url_for('entities.show', id=td_value) }}">{{ td_value }}</a>
+        {% else %}
+        {{ td_value }}
+        {% endif %}
+      </td>
+      {% endfor %}
+      <td>
+        <div class="d-flex flex-row gap-2">
+          <a href="{{ url_for('users.show', id=item.id) }}">
+            Modifier
+          </a>
+          <a class="link-danger" href="{{ url_for('adoptions.delete_confirmation', id=item.adoption_id) }}">
+            Désassocier
+          </a>
+        </div>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<p>No data available.</p>
+{% endif %}
+
+<h4>Association à un nouvel usager</h4>
+<form action="/adoptions" method="POST">
+  <input type="hidden" name="mobile_entity_id" value="{{ data.id }}">
+  <input type="hidden" name="redirect_url" value="{{ url_for('entities.show', id=data.id) }}">
+  <div class="d-flex flex-column gap-2 w-50">
+    <div class="form-group">
+      <label for="user_id">Usager</label>
+      <select class="form-control" id="user_id" name="user_id" required>
+        {% for user in all_users %}
+        <option value="{{ user.id }}">
+          {{ user.full_name }}
+        </option>
+        {% endfor %}
+      </select>
+    </div>
+    <div>
+      <button type="submit" class="btn btn-success">Ajouter</button>
+    </div>
+  </div>
+</form>
+
+<hr />
+
+<h4>Parcours</h4>
+{% if logs|length > 0 %}
+<table class="table">
+  <thead class="thead-dark">
+    <tr>
+      {% for key in logs[0] %}
+      <th scope="col">{{ key|humanize }}</th>
+      {% endfor %}
+    </tr>
+  </thead>
+  <tbody>
+    {% for item in logs %}
+    <tr>
+      {% for td_key, td_value in item.items() %}
+      <td>
+        {{ td_value }}
+      </td>
+      {% endfor %}
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<p>No data available.</p>
+{% endif %}
+<form action="{{ url_for('entities.log', id=data.id) }}" method="POST">
+  <input type="hidden" name="mobile_entity_id" value="{{ data.id }}">
+  <input type="hidden" name="redirect_url" value="{{ url_for('entities.show', id=data.id) }}">
+  <div class="d-flex flex-column gap-2 w-50">
+    <div class="form-group">
+      <label for="recorded_at">Recorded At</label>
+      <input type="datetime-local" id="recorded_at" name="recorded_at" required>
+    </div>
+    <div class="form-group">
+      <label for="lng">Lng</label>
+      <input type="number" step="0.000000001" id="lng" name="lng" required>
+    </div>
+    <div class="form-group">
+      <label for="lng">Lat</label>
+      <input type="number" step="0.000000001" id="lat" name="lat" required>
+    </div>
+    <div class="form-group">
+      <label for="lng">Temperature</label>
+      <input type="number" step="0.000000001" id="temperature" name="temperature" required>
+    </div>
+    <div class="form-group">
+      <label for="lng">Wind speed</label>
+      <input type="number" step="0.000000001" id="wind_speed" name="wind_speed" required>
+    </div>
+    <div class="form-group">
+      <label for="lng">Solar intensity</label>
+      <input type="number" step="0.000000001" id="solar_intensity" name="solar_intensity" required>
+    </div>
+    <div>
+      <button type="submit" class="btn btn-success">Ajouter</button>
+    </div>
+  </div>
+</form>
+
+{% endblock %}

@@ -1,0 +1,21 @@
+{% extends "layout/index.html" %}
+
+{% block content %}
+
+<h2>Supprimer l'adoption de l'usager {{ user.full_name }} pour l'entité mobile {{ entity.name }}?</h2>
+
+<p>
+  Êtes-vous sûr de vouloir supprimer l'adoption?
+<ul>
+  <li>Usager: <a href="{{ url_for('users.show', id=user.id )}}">{{ user.full_name }}</a></li>
+  <li>Entité mobile: <a href="{{ url_for('entities.show', id=entity.id )}}">{{ entity.name }}</a></li>
+</ul>
+</p>
+
+<form action="{{ url_for('adoptions.delete', id=adoption_id) }}" method="POST">
+  <div class="d-flex flex-row gap-2">
+    <button type="submit" class="btn btn-danger">Désassocier</button>
+  </div>
+</form>
+
+{% endblock %}
